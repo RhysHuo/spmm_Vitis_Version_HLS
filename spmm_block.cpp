@@ -187,7 +187,7 @@ void spmm(
 		u32 first_rowPrt_value
 
 		) {
-	#pragma HLS DATAFLOW
+	//#pragma HLS DATAFLOW
 
  	#pragma HLS INTERFACE m_axi port=columnIndex_0 offset=slave bundle=gmem0
  	#pragma HLS INTERFACE m_axi port=values_0 offset=slave bundle=gmem0
@@ -371,6 +371,7 @@ void spmm(
 
 //=======================================================================================
 
+			#pragma HLS DATAFLOW
 			u32 i;
 			//for (int i = 0; i < NO_HW_THREAD; i++) {
 			i = 0;
