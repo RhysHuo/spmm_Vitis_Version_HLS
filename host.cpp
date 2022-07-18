@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
-//#include <sys/time.h>
+#include <chrono>
 #include <algorithm>
 #include <vector>
 
@@ -305,19 +305,9 @@ int main(int argc, char** argv) {
     OCL_CHECK(err, cl::Buffer buffer_array_colIndices(context, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR , nnz * sizeof(u32), NULL, &err));    
     OCL_CHECK(err, cl::Buffer buffer_array_rowPtr(context, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR , (row_size + 1) * sizeof(u32), NULL, &err));
     //OCL_CHECK(err, cl::Buffer buffer_array_x(context, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR , col_size * no_vectors * sizeof(DATA_TYPE_X)/4, NULL, &err));
-    OCL_CHECK(err, cl::Buffer buffer_array_x(context, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR , col_size * no_vectors * sizeof(DATA_TYPE_X), NULL, &err));
+    OCL_CHECK(err, cl::Buffer buffer_array_x(context, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR , col_size * no_vectors * sizeof(DATA_TYPE_X)/4, NULL, &err));
     OCL_CHECK(err, cl::Buffer buffer_array_y(context, CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR , row_size * no_vectors * sizeof(DATA_TYPE_OUT), NULL, &err));
-	
-	std::cout << "cl::Buffer " << std::endl;
 
-	// For buffer buffer_array_y_golden, since we aren't using it for a kernel we'll specify the bank allocation
-	/*
-    cl_mem_ext_ptr_t bank_ext;
-    bank_ext.flags = 0 | XCL_MEM_TOPOLOGY;
-    bank_ext.obj   = NULL;
-    bank_ext.param = 0;
-	OCL_CHECK(err, cl::Buffer buffer_array_y_golden(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR | CL_MEM_EXT_PTR_XILINX, row_size * no_vectors * sizeof(DATA_TYPE_OUT), &bank_ext, &err));
-	*/
     DATA_TYPE_X *array_x;
     DATA_TYPE_OUT *array_y;
     DATA_TYPE_OUT * array_y_golden = new DATA_TYPE_OUT[row_size * no_vectors];
@@ -325,52 +315,18 @@ int main(int argc, char** argv) {
     u32 S_begin = 0;
     u32 S_end = row_size;
 
-    // Set the kernal argument
-	/*
-    int narg = 0;
-    OCL_CHECK(err, err = krnl.setArg(narg++, S_ternary));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_rowPtr));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_colIndices));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_colIndices));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_colIndices));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_colIndices));
-    OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_values));
-    OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_values));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_values));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_values));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_y));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_y));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_y));
-	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_y));
-    OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_x));
-    OCL_CHECK(err, err = krnl.setArg(narg++, no_vectors));
-    OCL_CHECK(err, err = krnl.setArg(narg++, col_size));
-    OCL_CHECK(err, err = krnl.setArg(narg++, row_size));
-    OCL_CHECK(err, err = krnl.setArg(narg++, nnz));
-    OCL_CHECK(err, err = krnl.setArg(narg++, S_begin));
-    OCL_CHECK(err, err = krnl.setArg(narg++, S_end));
-	OCL_CHECK(err, err = krnl.setArg(narg++, array_rowPtr[S_begin]));
-	std::cout << "krnl.setArg " << std::endl;
-	*/
-
-    
-
     //Map buffers to userspace pointers
     OCL_CHECK(err, array_values = (DATA_TYPE*)q.enqueueMapBuffer(buffer_array_values, CL_TRUE, CL_MAP_WRITE, 0, nnz * sizeof(DATA_TYPE), nullptr, nullptr, &err));
     OCL_CHECK(err, array_colIndices = (u32*)q.enqueueMapBuffer(buffer_array_colIndices, CL_TRUE, CL_MAP_WRITE, 0, nnz * sizeof(u32), nullptr, nullptr, &err));
     OCL_CHECK(err, array_rowPtr = (u32*)q.enqueueMapBuffer(buffer_array_rowPtr, CL_TRUE, CL_MAP_WRITE, 0, (row_size + 1) * sizeof(u32), nullptr, nullptr, &err));
     //OCL_CHECK(err, array_x = (DATA_TYPE_X*)q.enqueueMapBuffer(buffer_array_x, CL_TRUE, CL_MAP_WRITE, 0, col_size * no_vectors * sizeof(DATA_TYPE_X)/4, nullptr, nullptr, &err));
-	OCL_CHECK(err, array_x = (DATA_TYPE_X*)q.enqueueMapBuffer(buffer_array_x, CL_TRUE, CL_MAP_WRITE, 0, col_size * no_vectors * sizeof(DATA_TYPE_X), nullptr, nullptr, &err));
+	OCL_CHECK(err, array_x = (DATA_TYPE_X*)q.enqueueMapBuffer(buffer_array_x, CL_TRUE, CL_MAP_WRITE, 0, col_size * no_vectors * sizeof(DATA_TYPE_X)/4, nullptr, nullptr, &err));
 	OCL_CHECK(err, array_y = (DATA_TYPE_OUT*)q.enqueueMapBuffer(buffer_array_y, CL_TRUE, CL_MAP_READ, 0, row_size * no_vectors * sizeof(DATA_TYPE_OUT), nullptr, nullptr, &err));
-	//OCL_CHECK(err, array_y_golden = (DATA_TYPE_OUT*)q.enqueueMapBuffer(buffer_array_y_golden, CL_TRUE, CL_MAP_WRITE | CL_MAP_READ, 0, row_size * no_vectors * sizeof(DATA_TYPE_OUT), nullptr, nullptr, &err));
-	std::cout << "enqueueMapBuffer " << std::endl;
 	
     //Initialization
-    std::cout << "Start to init_array " << std::endl;
-
     init_array(S_ternary, array_x, no_vectors, col_size);
 	
-	std::cout << "init_array completed." << std::endl;
+	std::cout << "Complete : Init_arrays." << std::endl;
 	
 	if (fp_input != NULL) {
 		char line_2[1000];
@@ -405,8 +361,9 @@ int main(int argc, char** argv) {
 			line_number++;
 		}
 	}
-	std::cout << "Read data completed." << std::endl;
+	std::cout << "Complete : Load_arrays." << std::endl;
 	
+	// Set the kernal argument
 	int narg = 0;
     OCL_CHECK(err, err = krnl.setArg(narg++, S_ternary));
 	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_rowPtr));
@@ -429,19 +386,14 @@ int main(int argc, char** argv) {
     OCL_CHECK(err, err = krnl.setArg(narg++, nnz));
     OCL_CHECK(err, err = krnl.setArg(narg++, S_begin));
     OCL_CHECK(err, err = krnl.setArg(narg++, S_end));
-	OCL_CHECK(err, err = krnl.setArg(narg++, array_rowPtr[S_begin]));
-	std::cout << "krnl.setArg " << std::endl;
-	
-
-	//double start_time, end_time, execution_time;
+	OCL_CHECK(err, err = krnl.setArg(narg++, array_rowPtr[S_begin]));	
     
     // Date will be migrate to the kernal space
+auto fpga_begin = std::chrono::high_resolution_clock::now();
     OCL_CHECK(err, err = q.enqueueMigrateMemObjects({buffer_array_values, buffer_array_colIndices, buffer_array_rowPtr, buffer_array_x}, 0));
-	std::cout << "enqueueMigrateMemObjects_0 completed." << std::endl;
     
     // Lauch the kernal
     OCL_CHECK(err, err = q.enqueueTask(krnl));
-	std::cout << "enqueueTask completed." << std::endl;
     
     // To view the results, this call will transfer the data from FPGA to the host
 
@@ -451,23 +403,13 @@ int main(int argc, char** argv) {
 	// migrating the buffer back to the host for us. This is a coding style choice you must make.
 
     OCL_CHECK(err, err = q.enqueueMigrateMemObjects({buffer_array_y}, CL_MIGRATE_MEM_OBJECT_HOST));
-	std::cout << "enqueueMigrateMemObjects_CL_MIGRATE_MEM_OBJECT_HOST completed." << std::endl;
     
     q.finish();
-	std::cout << "q.finish() completed." << std::endl;
+	auto fpga_end = std::chrono::high_resolution_clock::now();
+	std::cout << "Complete : Kernel execution." << std::endl;
 
-    /*
-	start_time = getTimestamp();
-	
-	end_time = getTimestamp();
-	execution_time = (end_time - start_time) / (1000);
-	std::cout << "FPGA " << " Total execution_time = " << execution_time << " msec" << std::endl;
-
-    std::cout << "Start to mmult_golden " << std::endl;
-	start_time = getTimestamp();
-    */
-
-    std::cout << "Start to mmult_golden " << std::endl;
+	std::cout << "Start : mmult_golden." << std::endl;
+	auto cpu_begin = std::chrono::high_resolution_clock::now();
 
 	if (S_ternary==0)
     {
@@ -508,25 +450,37 @@ int main(int argc, char** argv) {
             col_size
         );
     }
-    /*
-	end_time = getTimestamp();
-
-	execution_time = (end_time - start_time) / (1000);
-	std::cout << "CPU " << " Total execution time = " << execution_time << " msec" << std::endl;
-    */
+   
 
     // Compare the results of the Device to the simulation
-    std::cout << "Start to result_check " << std::endl;
+    auto cpu_end = std::chrono::high_resolution_clock::now();
+    std::cout << "Complete : mmult_golden." << std::endl;
+	std::cout << "Start : result_check." << std::endl;
 
     if(result_check(array_y, array_y_golden, row_size, no_vectors))
         return 1;
+	
+	std::chrono::duration<double> fpga_duration = fpga_end - fpga_begin;
+	std::chrono::duration<double> cpu_duration = cpu_end - cpu_begin;
+	//float fpga_throughput = (double) numRuns*3*nbytes / fpga_duration.count() / (1024.0*1024.0);
+     	//float cpu_throughput  = (double) numRuns*3*nbytes / cpu_duration.count() / (1024.0*1024.0);
+	
+	std::cout << std::endl;
+	std::cout << "         Performance  " << std::endl;
+    	//std::cout << "          Total data: " << total << " MBits" << std::endl;
+    	std::cout << "           FPGA Time: " << fpga_duration.count() * 1000.0 << " ms" << std::endl;
+    	//std::cout << "     FPGA Throughput: " << total / fpga_duration.count() << " MBits/s" << std::endl;
+    	//std::cout << "FPGA PCIe Throughput: " << (2*total) / fpga_duration.count() << " MBits/s" << std::endl;
+	std::cout << "            CPU Time: " << cpu_duration.count() * 1000.0 << " ms" << std::endl;
+	std::cout << "       FPGA Speedup : " << cpu_duration.count() / fpga_duration.count() << " x" << std::endl;
+	std::cout << "----------------------------------------------------------------------------"   << std::endl;
+	
 
 	OCL_CHECK(err, err = q.enqueueUnmapMemObject(buffer_array_values, array_values));
     OCL_CHECK(err, err = q.enqueueUnmapMemObject(buffer_array_colIndices, array_colIndices));
 	OCL_CHECK(err, err = q.enqueueUnmapMemObject(buffer_array_rowPtr, array_rowPtr));
 	OCL_CHECK(err, err = q.enqueueUnmapMemObject(buffer_array_x, array_x));
     OCL_CHECK(err, err = q.enqueueUnmapMemObject(buffer_array_y, array_y));
-    //OCL_CHECK(err, err = q.enqueueUnmapMemObject(buffer_array_y_golden, array_y_golden));
 	q.finish();
 
 }
