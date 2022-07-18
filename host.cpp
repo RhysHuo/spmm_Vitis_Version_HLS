@@ -326,7 +326,7 @@ int main(int argc, char** argv) {
     u32 S_end = row_size;
 
     // Set the kernal argument
-	
+	/*
     int narg = 0;
     OCL_CHECK(err, err = krnl.setArg(narg++, S_ternary));
 	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_rowPtr));
@@ -351,6 +351,7 @@ int main(int argc, char** argv) {
     OCL_CHECK(err, err = krnl.setArg(narg++, S_end));
 	OCL_CHECK(err, err = krnl.setArg(narg++, array_rowPtr[S_begin]));
 	std::cout << "krnl.setArg " << std::endl;
+	*/
 
     
 
@@ -405,6 +406,31 @@ int main(int argc, char** argv) {
 		}
 	}
 	std::cout << "Read data completed." << std::endl;
+	
+	int narg = 0;
+    OCL_CHECK(err, err = krnl.setArg(narg++, S_ternary));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_rowPtr));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_colIndices));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_colIndices));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_colIndices));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_colIndices));
+    OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_values));
+    OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_values));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_values));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_values));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_y));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_y));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_y));
+	OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_y));
+    OCL_CHECK(err, err = krnl.setArg(narg++, buffer_array_x));
+    OCL_CHECK(err, err = krnl.setArg(narg++, no_vectors));
+    OCL_CHECK(err, err = krnl.setArg(narg++, col_size));
+    OCL_CHECK(err, err = krnl.setArg(narg++, row_size));
+    OCL_CHECK(err, err = krnl.setArg(narg++, nnz));
+    OCL_CHECK(err, err = krnl.setArg(narg++, S_begin));
+    OCL_CHECK(err, err = krnl.setArg(narg++, S_end));
+	OCL_CHECK(err, err = krnl.setArg(narg++, array_rowPtr[S_begin]));
+	std::cout << "krnl.setArg " << std::endl;
 	
 
 	//double start_time, end_time, execution_time;
