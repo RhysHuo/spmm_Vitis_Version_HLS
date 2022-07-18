@@ -193,17 +193,17 @@ void spmm(
  	#pragma HLS INTERFACE m_axi port=values_0 offset=slave bundle=gmem1
   	#pragma HLS INTERFACE m_axi port=y_0 offset=slave bundle=gmem2
 
-	#pragma HLS INTERFACE m_axi port=columnIndex_1 offset=slave bundle=gmem0
- 	#pragma HLS INTERFACE m_axi port=values_1 offset=slave bundle=gmem1
-  	#pragma HLS INTERFACE m_axi port=y_1 offset=slave bundle=gmem2
+	#pragma HLS INTERFACE m_axi port=columnIndex_1 offset=slave bundle=gmem3
+ 	#pragma HLS INTERFACE m_axi port=values_1 offset=slave bundle=gmem4
+  	#pragma HLS INTERFACE m_axi port=y_1 offset=slave bundle=gmem5
 
-	#pragma HLS INTERFACE m_axi port=columnIndex_2 offset=slave bundle=gmem0
- 	#pragma HLS INTERFACE m_axi port=values_2 offset=slave bundle=gmem1
-  	#pragma HLS INTERFACE m_axi port=y_2 offset=slave bundle=gmem2
+	#pragma HLS INTERFACE m_axi port=columnIndex_2 offset=slave bundle=gmem6
+ 	#pragma HLS INTERFACE m_axi port=values_2 offset=slave bundle=gmem7
+  	#pragma HLS INTERFACE m_axi port=y_2 offset=slave bundle=gmem8
 
-	#pragma HLS INTERFACE m_axi port=columnIndex_3 offset=slave bundle=gmem0
- 	#pragma HLS INTERFACE m_axi port=values_3 offset=slave bundle=gmem1
-  	#pragma HLS INTERFACE m_axi port=y_3 offset=slave bundle=gmem2
+	#pragma HLS INTERFACE m_axi port=columnIndex_3 offset=slave bundle=gmem9
+ 	#pragma HLS INTERFACE m_axi port=values_3 offset=slave bundle=gmem10
+  	#pragma HLS INTERFACE m_axi port=y_3 offset=slave bundle=gmem11
 
 	u32 rowSizeNew_local_rs[NO_HW_THREAD][ROW_SIZE_THREAD_MAX];
 	u32 rowSizeNew_local_nrs[NO_HW_THREAD][ROW_SIZE_THREAD_MAX];
