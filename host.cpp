@@ -338,7 +338,7 @@ int main(int argc, char** argv) {
     OCL_CHECK(err, cl::Buffer buffer_array_y(context, CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR , row_size * no_vectors * sizeof(DATA_TYPE_OUT), NULL, &err));
 
     DATA_TYPE_X *array_x;
-    DATA_TYPE_X *array_x_golden = new DATA_TYPE_OUT[col_size * no_vectors];
+    DATA_TYPE_X *array_x_golden = new DATA_TYPE_X[col_size * no_vectors];
     DATA_TYPE_OUT *array_y;
     DATA_TYPE_OUT * array_y_golden = new DATA_TYPE_OUT[row_size * no_vectors];
 
