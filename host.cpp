@@ -23,7 +23,7 @@
 
 u32 golden_spmm_ternary(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TYPE_X * x, u32 no_vectors, DATA_TYPE_OUT *y, u32 row_size, u32 col_size) {
 
-    std::cout << "gold_spmm_ternary: check point 1" << std::endl;
+    //std::cout << "gold_spmm_ternary: check point 1" << std::endl;
 	u32 nvc = 0, i = 0, j = 0, rowStart = 0, rowEnd = row_size;
 
 	DATA_TYPE_OUT y0 = 0;
@@ -72,7 +72,7 @@ u32 golden_spmm_ternary(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA
 
 u32 golden_spmm_byte(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TYPE_X * x, u32 no_vectors, DATA_TYPE_OUT *y, u32 row_size, u32 col_size) {
 
-    std::cout << "golden_spmm_byte: check point 2" << std::endl;
+    //std::cout << "golden_spmm_byte: check point 2" << std::endl;
 	u32 nvc = 0, i = 0, j = 0, rowStart = 0, rowEnd = row_size;
 
 	DATA_TYPE_OUT y0 = 0;
@@ -104,7 +104,7 @@ u32 golden_spmm_byte(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TY
 
 u32 golden_spmm_quad(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TYPE_X * x, u32 no_vectors, DATA_TYPE_OUT *y, u32 row_size, u32 col_size) {
 
-    std::cout << "golden_spmm_quad: check point 3" << std::endl;
+    //std::cout << "golden_spmm_quad: check point 3" << std::endl;
 	u32 nvc = 0, i = 0, j = 0, rowStart = 0, rowEnd = row_size;
 
 	DATA_TYPE_OUT y0 = 0;
