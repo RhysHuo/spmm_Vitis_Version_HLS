@@ -134,9 +134,38 @@ u32 golden_spmm_quad(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TY
 	return 0;
 }
 
+void init_array_golden(ap_uint<2> ternary, DATA_TYPE_X *x, u32 row, u32 col)
+{
+        if(ternary==0)
+	{
+		for (u32 i = 0; i < row; i++) {
+			for (u32 j = 0; j < col; j++) {
+				x[i*col+j] = 0x01010101;
+			}
+		}
+	}
+	else if (ternary==1)
+	{
+		for (u32 i = 0; i < row; i++) {
+			for (u32 j = 0; j < col; j++) {
+				x[i*col+j] = 0x55555555;
+			}
+		}
+	}
+	else
+	{
+		for (u32 i = 0; i < row; i++) {
+			for (u32 j = 0; j < col; j++) {
+				x[i*col+j] = 0x11111111;
+			}
+		}
+	}
+}
+
+
 void init_array(ap_uint<2> ternary, DATA_TYPE_X *x, u32 row, u32 col)
 {
-    if(ternary==0)
+        if(ternary==0)
 	{
 		for (u32 i = 0; i < row; i++) {
 			for (u32 j = 0; j < (col>>2); j++) {
@@ -309,6 +338,7 @@ int main(int argc, char** argv) {
     OCL_CHECK(err, cl::Buffer buffer_array_y(context, CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR , row_size * no_vectors * sizeof(DATA_TYPE_OUT), NULL, &err));
 
     DATA_TYPE_X *array_x;
+    DATA_TYPE_X *array_x_golden = new DATA_TYPE_OUT[col_size * no_vectors];
     DATA_TYPE_OUT *array_y;
     DATA_TYPE_OUT * array_y_golden = new DATA_TYPE_OUT[row_size * no_vectors];
 
@@ -325,6 +355,7 @@ int main(int argc, char** argv) {
 	
     //Initialization
     init_array(S_ternary, array_x, no_vectors, col_size);
+	init_array_golden(S_ternary, array_x_golden, no_vectors, col_size);
 	
 	std::cout << "Complete : Init_arrays." << std::endl;
 	
@@ -417,7 +448,7 @@ auto fpga_begin = std::chrono::high_resolution_clock::now();
             array_values,
             array_rowPtr,
             array_colIndices,
-            array_x,
+            array_x_golden,
             no_vectors,
             array_y_golden,
             row_size,
@@ -430,7 +461,7 @@ auto fpga_begin = std::chrono::high_resolution_clock::now();
             array_values,
             array_rowPtr,
             array_colIndices,
-            array_x,
+            array_x_golden,
             no_vectors,
             array_y_golden,
             row_size,
@@ -443,7 +474,7 @@ auto fpga_begin = std::chrono::high_resolution_clock::now();
             array_values,
             array_rowPtr,
             array_colIndices,
-            array_x,
+            array_x_golden,
             no_vectors,
             array_y_golden,
             row_size,
