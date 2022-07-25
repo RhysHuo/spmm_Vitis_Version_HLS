@@ -434,50 +434,48 @@ auto fpga_begin = std::chrono::high_resolution_clock::now();
 
 	std::cout << "Start : mmult_golden." << std::endl;
 	auto cpu_begin = std::chrono::high_resolution_clock::now();
-
 	if (S_ternary==0)
-    {
-        golden_spmm_byte(
-            array_values,
-            array_rowPtr,
-            array_colIndices,
-            array_x,
-            no_vectors,
-            array_y_golden,
-            row_size,
-            col_size
-        );
-    }
+    	{
+       	    	golden_spmm_byte(
+		    array_values,
+		    array_rowPtr,
+		    array_colIndices,
+		    array_x,
+		    no_vectors,
+		    array_y_golden,
+		    row_size,
+		    col_size
+            	);
+    	}
 	else if (S_ternary==1)
-    {
-        golden_spmm_ternary(
-            array_values,
-            array_rowPtr,
-            array_colIndices,
-            array_x,
-            no_vectors,
-            array_y_golden,
-            row_size,
-            col_size
-        );
-    }
+    	{
+            	golden_spmm_ternary(
+		    array_values,
+		    array_rowPtr,
+		    array_colIndices,
+		    array_x,
+		    no_vectors,
+		    array_y_golden,
+		    row_size,
+		    col_size
+        	);
+    	}
 	else
-    {
-        golden_spmm_quad(
-            array_values,
-            array_rowPtr,
-            array_colIndices,
-            array_x,
-            no_vectors,
-            array_y_golden,
-            row_size,
-            col_size
-        );
-    }
-   
+    	{
+        	golden_spmm_quad(
+		    array_values,
+		    array_rowPtr,
+		    array_colIndices,
+		    array_x,
+		    no_vectors,
+		    array_y_golden,
+		    row_size,
+		    col_size
+        	);
+   	}
+   	auto cpu_end = std::chrono::high_resolution_clock::now();
 
     // Compare the results of the Device to the simulation
-    auto cpu_end = std::chrono::high_resolution_clock::now();
     std::cout << "Complete : mmult_golden." << std::endl;
 	std::cout << "Start : result_check." << std::endl;
 
