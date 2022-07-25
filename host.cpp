@@ -70,7 +70,7 @@ u32 golden_spmm_ternary(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA
 	return 0;
 }
 
-u32 golden_spmm_byte(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TYPE_X * x, u32 no_vectors, DATA_TYPE_OUT *y, u32 row_size, u32 col_size) {
+void golden_spmm_byte(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TYPE_X * x, u32 no_vectors, DATA_TYPE_OUT *y, u32 row_size, u32 col_size) {
 
 	u32 nvc = 0, i = 0, j = 0, rowStart = 0, rowEnd = row_size;
 
@@ -93,8 +93,6 @@ u32 golden_spmm_byte(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TY
 			y[nvc*row_size+i] = y0;
 		}
 	}
-
-	return 0;
 }
 
 u32 golden_spmm_quad(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TYPE_X * x, u32 no_vectors, DATA_TYPE_OUT *y, u32 row_size, u32 col_size) {
