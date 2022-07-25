@@ -126,7 +126,7 @@ u32 golden_spmm_quad(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TY
 
 	return 0;
 }
-/*
+
 void init_array_golden(ap_uint<2> ternary, DATA_TYPE_X *x, u32 row, u32 col)
 {
         if(ternary==0)
@@ -154,7 +154,7 @@ void init_array_golden(ap_uint<2> ternary, DATA_TYPE_X *x, u32 row, u32 col)
 		}
 	}
 }
-*/
+
 
 void init_array(ap_uint<2> ternary, DATA_TYPE_X *x, u32 row, u32 col)
 {
@@ -331,7 +331,7 @@ int main(int argc, char** argv) {
     OCL_CHECK(err, cl::Buffer buffer_array_y(context, CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR , row_size * no_vectors * sizeof(DATA_TYPE_OUT), NULL, &err));
 
     DATA_TYPE_X *array_x;
-    //DATA_TYPE_X *array_x_golden = new DATA_TYPE_X[col_size * no_vectors];
+    DATA_TYPE_X *array_x_golden = new DATA_TYPE_X[col_size * no_vectors];
     DATA_TYPE_OUT *array_y;
     DATA_TYPE_OUT * array_y_golden = new DATA_TYPE_OUT[row_size * no_vectors];
 
@@ -349,6 +349,11 @@ int main(int argc, char** argv) {
     //Initialization
     init_array(S_ternary, array_x, no_vectors, col_size);
 	init_array_golden(S_ternary, array_x_golden, no_vectors, col_size);
+	
+	std::cout << "col = " << col_size << std::endl;
+	std::cout << "col>>2 = " << (col_size>>2) << std::endl;
+	std::cout << "size of array_x = " << sizeof(array_x) << std::endl;
+	std::cout << "size of array_x_golden = " << sizeof(array_x_golden) << std::endl;
 	
 	std::cout << "Complete : Init_arrays." << std::endl;
 	
@@ -434,6 +439,20 @@ auto fpga_begin = std::chrono::high_resolution_clock::now();
 
 	std::cout << "Start : mmult_golden." << std::endl;
 	auto cpu_begin = std::chrono::high_resolution_clock::now();
+		golden_spmm_byte(
+		    array_values,
+		    array_rowPtr,
+		    array_colIndices,
+		    array_x_golden,
+		    no_vectors,
+		    array_y_golden,
+		    row_size,
+		    col_size
+            	);
+	auto cpu_end = std::chrono::high_resolution_clock::now();
+	
+	/*
+	auto cpu_begin = std::chrono::high_resolution_clock::now();
 	if (S_ternary==0)
     	{
        	    	golden_spmm_byte(
@@ -474,6 +493,7 @@ auto fpga_begin = std::chrono::high_resolution_clock::now();
         	);
    	}
    	auto cpu_end = std::chrono::high_resolution_clock::now();
+	*/
 
     // Compare the results of the Device to the simulation
     std::cout << "Complete : mmult_golden." << std::endl;
