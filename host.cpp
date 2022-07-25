@@ -72,7 +72,6 @@ u32 golden_spmm_ternary(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA
 
 u32 golden_spmm_byte(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TYPE_X * x, u32 no_vectors, DATA_TYPE_OUT *y, u32 row_size, u32 col_size) {
 
-    //std::cout << "golden_spmm_byte: check point 2" << std::endl;
 	u32 nvc = 0, i = 0, j = 0, rowStart = 0, rowEnd = row_size;
 
 	DATA_TYPE_OUT y0 = 0;
@@ -81,7 +80,6 @@ u32 golden_spmm_byte(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TY
 		for (i = rowStart; i < rowEnd; ++i) {
 			y0 = 0;
 			for (j = row_ptr[i]; j < row_ptr[i + 1]; ++j) {
-				//y0 += values[j] * x[nvc*col_size+col_indices[j]];
 				for(int z = 0; z < DTYPE_LENGTH; z+=8) {
 					            DATA_TYPE values_val1 = values[j];
 								ap_int<8> values_val = values_val1.range(z+7,z);
@@ -89,12 +87,9 @@ u32 golden_spmm_byte(DATA_TYPE * values, u32 *row_ptr, u32* col_indices, DATA_TY
 								int x_up = x_value >> 2;
 								int x_down = (x_value & 0x3);
 						       	y0 += values_val * x[x_up].range(x_down*8+7,x_down*8);
-						       	//std::cout << "y0 " << y0 << std::endl;
 
 				}
-				//std::cout << "y0 is " << y0 << std::endl;
 			}
-			//std::cout << "y0 is " << y0 << std::endl;
 			y[nvc*row_size+i] = y0;
 		}
 	}
