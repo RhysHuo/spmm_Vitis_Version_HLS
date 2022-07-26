@@ -351,11 +351,6 @@ int main(int argc, char** argv) {
     init_array(S_ternary, array_x, no_vectors, col_size);
 	//init_array_golden(S_ternary, array_x_golden, no_vectors, col_size);
 	
-	std::cout << "col = " << col_size << std::endl;
-	std::cout << "col>>2 = " << (col_size>>2) << std::endl;
-	std::cout << "size of array_x = " << sizeof(array_x) << std::endl;
-	std::cout << "size of array_x_golden = " << sizeof(array_x_golden) << std::endl;
-	
 	std::cout << "Complete : Init_arrays." << std::endl;
 	
 	if (fp_input != NULL) {
