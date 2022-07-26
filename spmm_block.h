@@ -45,10 +45,10 @@ const static int II = 4;
 const static int NO_HW_THREAD = 4;
 
 #define DTYPE_LENGTH_X 32
-#define DTYPE_LENGTH 32//32//8//32
+#define DTYPE_LENGTH 8//32//8//32
 typedef ap_int<DTYPE_LENGTH> DATA_TYPE;
 typedef ap_int<DTYPE_LENGTH_X> DATA_TYPE_X;
-typedef ap_int<32> DATA_TYPE_OUT;
+typedef ap_int<16> DATA_TYPE_OUT;
 
 typedef unsigned int u32;
 //const static int ROW_SIZE_MAX        = (1024*64);
