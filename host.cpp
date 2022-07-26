@@ -349,7 +349,7 @@ int main(int argc, char** argv) {
 	
     //Initialization
     init_array(S_ternary, array_x, no_vectors, col_size);
-	init_array_golden(S_ternary, array_x_golden, no_vectors, col_size);
+	//init_array_golden(S_ternary, array_x_golden, no_vectors, col_size);
 	
 	std::cout << "col = " << col_size << std::endl;
 	std::cout << "col>>2 = " << (col_size>>2) << std::endl;
