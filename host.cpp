@@ -432,7 +432,8 @@ auto fpga_begin = std::chrono::high_resolution_clock::now();
     q.finish();
 	auto fpga_end = std::chrono::high_resolution_clock::now();
 	std::cout << "Complete : Kernel execution." << std::endl;
-
+	
+	/*
 	std::cout << "Start : mmult_golden." << std::endl;
 	
 	auto cpu_begin = std::chrono::high_resolution_clock::now();
@@ -484,9 +485,9 @@ auto fpga_begin = std::chrono::high_resolution_clock::now();
 
     if(result_check(array_y, array_y_golden, row_size, no_vectors))
         return 1;
-	
+	*/
 	std::chrono::duration<double> fpga_duration = fpga_end - fpga_begin;
-	std::chrono::duration<double> cpu_duration = cpu_end - cpu_begin;
+	//std::chrono::duration<double> cpu_duration = cpu_end - cpu_begin;
 	//float fpga_throughput = (double) numRuns*3*nbytes / fpga_duration.count() / (1024.0*1024.0);
      	//float cpu_throughput  = (double) numRuns*3*nbytes / cpu_duration.count() / (1024.0*1024.0);
 	
@@ -497,8 +498,8 @@ auto fpga_begin = std::chrono::high_resolution_clock::now();
     	std::cout << "           FPGA Time: " << fpga_duration.count() * 1000.0 << " ms" << std::endl;
     	//std::cout << "     FPGA Throughput: " << total / fpga_duration.count() << " MBits/s" << std::endl;
     	//std::cout << "FPGA PCIe Throughput: " << (2*total) / fpga_duration.count() << " MBits/s" << std::endl;
-	std::cout << "            CPU Time: " << cpu_duration.count() * 1000.0 << " ms" << std::endl;
-	std::cout << "       FPGA Speedup : " << cpu_duration.count() / fpga_duration.count() << " x" << std::endl;
+	//std::cout << "            CPU Time: " << cpu_duration.count() * 1000.0 << " ms" << std::endl;
+	//std::cout << "       FPGA Speedup : " << cpu_duration.count() / fpga_duration.count() << " x" << std::endl;
 	std::cout << "----------------------------------------------------------------------------"   << std::endl;
 	
 
