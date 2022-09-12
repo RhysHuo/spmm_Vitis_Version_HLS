@@ -43,8 +43,8 @@ One of matrices is read from data file so you should have this data file in the 
 You can run this application using the following command:
 
 ```
-./host.exe spmm.hw.xclbin <data file> <precision controller>
+./host.exe spmm.hw.xclbin <data_file> <precision_controller>
 ```
-You can choose the precision `<precision controller>` of data.
+You can choose the precision `<precision_controller>` of data.
 
 Precision controller : `0` for 8 bits, `1` for 2 bits, `2` for 4 bits.
