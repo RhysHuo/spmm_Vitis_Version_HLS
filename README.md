@@ -31,7 +31,7 @@ You can clone this and add to your working path. You can include it when buildin
 By running the following command, you can get `host.exe`.
 
 ```
-g++ -g -std=c++14 -I$XILINX_XRT/include -L${XILINX_XRT}/lib/ -I/mnt/scratch/rhyhuo/HLS_arbitrary_Precision_Types/include -o host.exe host.cpp spmm_block.h -lOpenCL -pthread -lrt -lstdc++
+g++ -g -std=c++14 -I$XILINX_XRT/include -L${XILINX_XRT}/lib/ -I/HLS_arbitrary_Precision_Types/include -o host.exe host.cpp spmm_block.h -lOpenCL -pthread -lrt -lstdc++
 ```
 
 ## Run the Application
